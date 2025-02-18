@@ -7,20 +7,28 @@
 
 The company emsTradepoint/Energy Market Services (EMS) ("https://www.emstradepoint.co.nz/#downloads") hosts csv files of recent New Zealand Unit (NZU) prices on its website.
 
+# download the csv file
 S2V8ELm <- read.csv( file = "https://www.emstradepoint.co.nz/documents/665/NZUTrades_S2V8ELm.csv")
-str(S2V8ELm)
+# save the raw downloaded .csv data file
+write.csv(S2V8ELm, file = "NZUTrades_S2V8ELm.csv", row.names = FALSE)
 
+str(S2V8ELm)
+# reformat date columns
 S2V8ELm[["Date...Time"]] <- strptime(S2V8ELm[["Date...Time"]],format= "%m/%d/%Y %H:%M")
 S2V8ELm[["Delivery.Date"]] <- as.Date(S2V8ELm[["Delivery.Date"]],format= "%d-%b-%y")
 S2V8ELm[["Date...Time"]] <- as.Date(S2V8ELm[["Date...Time"]] )
 
+# add zoo timeseries package
 library(zoo)
+# create a zoo matrix of prices and trade placement dates
 S2V8ELmdatetimezoo <- zoo(x = S2V8ELm[["Unit.Price"]] , order.by = S2V8ELm[["Date...Time"]])
+# create a zoo matrix of prices and NZU delivery/settlement dates -  settlement date is usually two business Days after the trade day
 S2V8ELmdeliverydatezoo <- zoo(x = S2V8ELm[["Unit.Price"]] , order.by = S2V8ELm[["Delivery.Date"]])
 
 ## remove duplicated indexes with zoo by median (or with average) with Date...Time dates
+# There may be many trades at different prices each work day. 'Aggregate' function applied to a zoo matrix can calculate a median price for all trades on a work day
 S2V8ELmdatetimemedianzoocut <- aggregate(S2V8ELmdatetimezoo, as.Date(cut(time(S2V8ELmdatetimezoo), "day")), median)
-# create dataframe
+# create dataframe of dates and prices from the zoo matrix
 S2V8ELmdatetimemediandataframe <- data.frame(date = index(S2V8ELmdatetimemedianzoocut),price= round(coredata(S2V8ELmdatetimemedianzoocut),2))
 
 # Create a .csv formatted data file
