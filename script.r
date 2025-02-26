@@ -8,7 +8,8 @@
 NZUTrades_94O1l9s <- read.csv( file = "https://www.emstradepoint.co.nz/documents/670/NZUTrades_94O1l9s.csv")
 # Create a .csv formatted data file
 write.csv(NZUTrades_94O1l9s, file = "NZUTrades_94O1l9s.csv", row.names = FALSE)
-
+# read in local csv file
+NZUTrades_94O1l9s <- read.csv( file = "NZUTrades_94O1l9s.csv")
 str(NZUTrades_94O1l9s)
 'data.frame':	570 obs. of  11 variables:
  $ Trade.ID        : int  28410 28392 28391 28390 28384 28370 28369 28368 28367 28366 ...
@@ -59,18 +60,19 @@ CARBON_TRADE_DATA_24_05_24[["Date...Time"]][1]                      # most recen
 CARBON_TRADE_DATA_24_05_24[["Date...Time"]][989]
 [1] "17/02/2021 9:56"                                               # that is the first trade
 
-# the two dataframes imclude all trades sinces inception with over lap 12/03/2024 to 27/05/2024
+# the two dataframes imclude all trades sinces trading started in 17/02/2021 with over lap 12/03/2024 to 27/05/2024
 NZUTrades_94O1l9s
 CARBON_TRADE_DATA_24_05_24
 
-# reformat date columns
+# reformat date columns - check the first date row 1
 NZUTrades_94O1l9s[["Date...Time"]][1]
 [1] "2/14/2025 10:07"
+# what is the class?
 class(NZUTrades_94O1l9s[["Date...Time"]][1])
 [1] "character"
 # format to strptime date time NOTE its %m/%d/%Y mm/dd/yyyy
 NZUTrades_94O1l9s[["Date...Time"]] <- strptime(NZUTrades_94O1l9s[["Date...Time"]],format= "%m/%d/%Y %H:%M")
-#
+# check date again
 str(NZUTrades_94O1l9s[["Date...Time"]][1])
  POSIXlt[1:1], format: "2025-02-14 10:07:00"
 
@@ -101,6 +103,7 @@ str(as.Date(CARBON_TRADE_DATA_24_05_24[["Delivery.Period"]][989],format= "%d-%b-
  Date[1:1], format: "2021-02-24"
 # format to yyyy-mm-dd as.Date format
 CARBON_TRADE_DATA_24_05_24[["Delivery.Period"]] <- as.Date(CARBON_TRADE_DATA_24_05_24[["Delivery.Period"]],format= "%d-%b-%y")
+# check date again
 str(CARBON_TRADE_DATA_24_05_24[["Delivery.Period"]][1])
  Date[1:1], format: "2024-05-27"
 
@@ -118,7 +121,7 @@ trades <- rbind(NZUTrades_94O1l9s, CARBON_TRADE_DATA_24_05_24)
 # Full join - Keep 1 each of all rows by 'id' and 'date' of both data frames
 # trades <- merge(x = CARBON_TRADE_DATA_24_05_24, y = NZUTrades_94O1l9s, by = "Trade.ID", all.x = TRUE, all.y = TRUE)     # Full join - Keep 1 each of all rows by 'id' of both data frames
 str(trades)
-'data.frame':	1447 obs. of  21 variables::  ???????
+'data.frame':	1559 obs. of  21 variables::  ???????
 # is 1447 the number of unique trade ids? probably
 table(trades$Trade.ID)
  9744  9845 10032 10105 10373 10388 10389 10415 10416 10417 10611 10875 10950
@@ -134,7 +137,7 @@ uniquetrades <- trades[!duplicated(trades[["Trade.ID"]]), ]
 table(duplicated(uniquetrades[["Trade.ID"]]))
 FALSE
  1447
- str(uniquetrades)
+str(uniquetrades)
 'data.frame':	1447 obs. of  11 variables:
  $ Trade.ID        : int  9744 9845 10032 10105 10373 10388 10389 10415 10416 10417 ...
  $ Date...Time     : POSIXlt, format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" ...
@@ -149,21 +152,21 @@ FALSE
  $ Anonymous       : chr  "Y" "Y" "Y" "Y" ...
 # save the raw downloaded .csv data file
 write.csv(uniquetrades, file = "uniquetrades.csv", row.names = FALSE)
+# read csv file back into R
+uniquetrades <- read.csv("uniquetrades.csv")
+str(uniquetrades)
+'data.frame':	1447 obs. of  11 variables:
+ $ Trade.ID        : int  9744 9845 10032 10105 10373 10388 10389 10415 10416 10417 ...
+ $ Date...Time     : chr  "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" "2021-04-06 17:03:00" ...
+ $ Product         : chr  "CP-NZU" "CP-NZU" "CP-NZU" "CP-NZU" ...
+ $ Delivery.Date   : chr  "2021-02-24" "2021-03-10" "2021-04-09" "2021-04-13" ...
 
-(today <- Sys.Date())
-[1] "2025-02-18"
-
-## remove duplicated indexes with zoo by median (or with average) with Date...Time dates
-# There aree many trades at different prices each work day. 'Aggregate' function applied to a zoo matrix can calculate a median price for all trades on a work day
-# make a zoo time series matrix of unique trades
-S2V8ELmdatetimemedianzoocut <- aggregate(S2V8ELmdatetimezoo, as.Date(cut(time(S2V8ELmdatetimezoo), "day")), median)
-# create dataframe of dates and prices from the zoo matrix
-S2V8ELmdatetimemediandataframe <- data.frame(date = index(S2V8ELmdatetimemedianzoocut),price= round(coredata(S2V8ELmdatetimemedianzoocut),2))
+#uniquetrades[["Date...Time"]] <- strptime(uniquetrades[["Date...Time"]],format= "%m/%d/%Y %H:%M")
 
 # Create a .csv formatted data file
-write.csv(S2V8ELmdatetimemediandataframe, file = "S2V8ELmdatetimemediandataframe.csv", row.names = FALSE)
+write.csv(uniquetradesdatetimemediandataframe, file = "uniquetradesdatetimemediandataframe.csv", row.names = FALSE)
 
-## charts
+## chart
 # what should the y axis limit be?
 max(uniquetrades[["Unit.Price"]] )
 [1] 90.5
@@ -174,10 +177,145 @@ plot(uniquetrades[["Date...Time"]], uniquetrades[["Unit.Price"]] ,ylim=c(0,95),t
 points(uniquetrades[["Date...Time"]], uniquetrades[["Unit.Price"]] ,col='red',pch=19,cex=0.5)
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
-mtext(side=1,cex=0.8,line=-1.1,"Data: 'NZU prices' https://www.emstradepoint.co.nz/#downloads")
+mtext(side=1,cex=0.1,line=-1.1,"Data: 'NZU prices' https://www.emstradepoint.co.nz/#downloads")
 mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint New Zealand Unit trading prices")) )
 mtext(side=2,cex=1, line=-1.3,"$NZ Dollars/tonne")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
+dev.off()
+
+## remove duplicated indexes with zoo by median (or with average) with Date...Time dates
+# There are many trades at different prices each work day. 'Aggregate' function applied to a zoo matrix can calculate a median price for all trades on a work day
+# make a zoo time series matrix of unique trades
+# add zoo timeseries package
+library(zoo)
+# create a zoo matrix of prices and trade placement dates
+uniquetradestimezoo <- zoo(x = uniquetrades[["Unit.Price"]] , order.by = uniquetrades[["Date...Time"]])
+Warning message:
+In zoo(x = uniquetrades[["Unit.Price"]], order.by = uniquetrades[["Date...Time"]]) :
+  some methods for “zoo” objects do not work if the index entries in ‘order.by’ are not unique
+# yes we know there are sometimes multiple prices each day..
+str(uniquetradestimezoo)
+‘zoo’ series from 2021-02-17 09:56:00 to 2025-02-14 10:07:00
+  Data: num [1:1447] 40 39 39 39 41.1 ...
+  Index:  POSIXlt[1:1447], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
+
+# aggregate by day to get median daily prices
+dailymedianprices <- aggregate(uniquetradestimezoo, as.Date(cut(time(uniquetradestimezoo), "day")), median)
+str(dailymedianprices)
+‘zoo’ series from 2021-02-17 to 2025-02-14
+  Data: num [1:535] 40 39 39 39 41.1 ...
+  Index:  Date[1:535], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-05" "2021-05-16" ...
+
+# create dataframe of dates and prices from the zoo matrix
+dailymedianpricesdataframe <- data.frame(date = index(dailymedianprices),price= round(coredata(dailymedianprices),2))
+str(dailymedianpricesdataframe)
+'data.frame':	535 obs. of  2 variables:
+ $ date : Date, format: "2021-02-17" "2021-03-03" ...
+ $ price: num  40 39 39 39 41.1 ...
+# write a csv file
+write.csv(dailymedianpricesdataframe, file = "dailymedianprices.csv", row.names = FALSE)
+
+## chart
+# what should the y axis limit be?
+max(dailymedianpricesdataframe[["price"]] )
+[1] 88.4
+colour [1] "#E41A1C" Alizarin Crimson,
+
+# create chart of dataframe of unique trades by date time and price
+svg(filename="NZUpriceEmsTradePointMedian-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+par(mar=c(2.7,2.7,1,1)+0.1)
+plot(dailymedianprices  ,ylim=c(0,95),tck=0.01,xlab="",ylab="",ann=TRUE, las=1,col="#E41A1C",lwd=1,type='l',lty=1)
+points(dailymedianprices ,col="#E41A1C",pch=19,cex=0.5)
+grid(col="darkgray",lwd=1)
+axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
+mtext(side=1,cex=0.1,line=-1.1,"Data: 'NZU prices' https://www.emstradepoint.co.nz/#downloads")
+mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint median daily price New Zealand Unit trading")) )
+mtext(side=2,cex=1, line=-1.3,"$NZ Dollars/tonne")
+mtext(side=4,cex=0.75, line=0.05,R.version.string)
+dev.off()
+
+## Indices
+# read in the VWAP ECMI ECQI indices data
+ECMI_ECQI_15_01_24 <- read.csv( file = "/home/user/R/nzu/ECMI_ECQI_15-01-24.csv")
+str(ECMI_ECQI_15_01_24)
+'data.frame':	365 obs. of  4 variables:
+ $ Date      : chr  "15-01-2023" "16-01-2023" "17-01-2023" "18-01-2023" ...
+ $ Daily.VWAP: num  0 76.1 0 0 0 ...
+ $ ECMI      : num  82.7 80.3 80.3 80.3 80.3 ...
+ $ ECQI      : num  85.1 84.8 84.8 84.9 84.9 ...
+
+# check if date is date format, no its character format
+str(ECMI_ECQI_15_01_24[["Date"]][1])
+ chr "15-01-2023"
+# check conversion by converting row 1 date to date format
+str(as.Date(ECMI_ECQI_15_01_24[["Date"]][1], format = "%d-%m-%Y"))
+Date[1:1], format: "2023-01-15"
+# format date column to date format
+ECMI_ECQI_15_01_24[["Date"]]  <- as.Date(ECMI_ECQI_15_01_24[["Date"]], format = "%d-%m-%Y")
+# check format of dataframe again
+str(ECMI_ECQI_15_01_24[["Date"]])
+ Date[1:365], format: "2023-01-15" "2023-01-16" "2023-01-17" "2023-01-18" "2023-01-19" ...
+## chart
+# what should the y axis limit be?
+summary(ECMI_ECQI_15_01_24 )
+      Date              Daily.VWAP         ECMI            ECQI
+ Min.   :2023-01-15   Min.   : 0.00   Min.   :44.22   Min.   :52.24
+ 1st Qu.:2023-04-16   1st Qu.: 0.00   1st Qu.:59.54   1st Qu.:60.98
+ Median :2023-07-16   Median : 0.00   Median :66.68   Median :65.18
+ Mean   :2023-07-16   Mean   :28.25   Mean   :64.87   Mean   :66.54
+ 3rd Qu.:2023-10-15   3rd Qu.:64.55   3rd Qu.:70.04   3rd Qu.:69.72
+ Max.   :2024-01-14   Max.   :90.50   Max.   :82.74   Max.   :85.15
+
+# Replace zeros with NA on data frame
+ECMI_ECQI_15_01_24[ECMI_ECQI_15_01_24 == 0] <- NA
+      Date              Daily.VWAP         ECMI            ECQI
+ Min.   :2023-01-15   Min.   :37.57   Min.   :44.22   Min.   :52.24
+ 1st Qu.:2023-04-16   1st Qu.:56.98   1st Qu.:59.54   1st Qu.:60.98
+ Median :2023-07-16   Median :65.00   Median :66.68   Median :65.18
+ Mean   :2023-07-16   Mean   :62.87   Mean   :64.87   Mean   :66.54
+ 3rd Qu.:2023-10-15   3rd Qu.:70.00   3rd Qu.:70.04   3rd Qu.:69.72
+ Max.   :2024-01-14   Max.   :90.50   Max.   :82.74   Max.   :85.15
+                      NAs   :201
+Outliers in VWAP?
+2023-08-03	84.65
+2023-09-20	90.5
+
+# write a csv file
+write.csv(ECMI_ECQI_15_01_24, file = "ECMI_ECQI_15_01_24.csv", row.names = FALSE)
+
+# colours
+library(scales)
+#extract hex color codes for a plot with three elements in ggplot2
+hex <- hue_pal()(4)
+#display hex color codes
+hex 3
+[1] "#F8766D" "#00BA38" "#619CFF"
+#1] Froly? (red) ; Jade ; Malibu
+hex 4
+[1] "#F8766D" "#7CAE00" "#00BFC4" "#C77CFF"
+
+plot(ECMI_ECQI_15_01_24[["Date"]], ECMI_ECQI_15_01_24[["ECMI"]] ,ylim=c(0,95),tck=0.01,xlab="",ylab="",ann=TRUE, las=1,col='red',lwd=1,type='o',lty=1)
+
+# create chart of dataframe of inddicies
+svg(filename="NZU-indices-EmsTradePointspot1-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+par(mar=c(2.7,2.7,1,1)+0.1)
+plot(ECMI_ECQI_15_01_24[["Date"]], ECMI_ECQI_15_01_24[["ECMI"]] ,ylim=c(0,95),tck=0.01,xlab="",ylab="",ann=TRUE, las=1,col="#F8766D",lwd=1,type='n',lty=1)
+lines(ECMI_ECQI_15_01_24[["Date"]], ECMI_ECQI_15_01_24[["ECMI"]] ,col="#F8766D")
+lines(ECMI_ECQI_15_01_24[["Date"]], ECMI_ECQI_15_01_24[["ECQI"]] ,col="#7CAE00")
+lines(ECMI_ECQI_15_01_24[["Date"]], ECMI_ECQI_15_01_24[["Daily.VWAP"]] ,col="#00BFC4")
+points(ECMI_ECQI_15_01_24[["Date"]], ECMI_ECQI_15_01_24[["ECMI"]] ,col="#F8766D",lwd=1,pch=19,cex=0.9)
+points(ECMI_ECQI_15_01_24[["Date"]], ECMI_ECQI_15_01_24[["ECQI"]] ,col="#7CAE00",pch=19,cex=0.9)
+points(ECMI_ECQI_15_01_24[["Date"]], ECMI_ECQI_15_01_24[["Daily.VWAP"]] ,col="#00BFC4",pch=19,cex=0.9)
+#points(uniquetrades[["Date...Time"]], uniquetrades[["Unit.Price"]] ,col="#C77CFF",pch=19,cex=0.5)
+#lines(dailymedianprices,col="#C77CFF",pch=19,cex=0.5)
+grid(col="darkgray",lwd=1)
+axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
+#mtext(side=1,cex=0.8,line=-1.1,"Data: 'NZU prices' https://www.emstradepoint.co.nz/#downloads")
+mtext(side=1,cex=1,line=2.5,"Data: 'NZU prices' https://www.emstradepoint.co.nz/#downloads")
+mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint NZU indices")) )
+mtext(side=2,cex=1, line=-1.3,"$NZ Dollars/tonne")
+mtext(side=4,cex=0.75, line=0.05,R.version.string)
+legend("bottom", inset=c(0.0,0.0) ,bty="n", legend=c("ECMI monthly index","ECQI quarterly index","Daily.VWAP volume weighted average price"),lty = 1, pch = 19,col=c("#F8766D", "#7CAE00", "#00BFC4"))
 dev.off()
 
 sessionInfo()
