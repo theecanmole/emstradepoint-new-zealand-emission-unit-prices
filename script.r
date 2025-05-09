@@ -1,57 +1,54 @@
-## EMS trade point NZU prices
+.........## EMS trade point NZU prices
 
 # The energy trading company emsTradepoint publishs New Zealand Unit (carbon) prices from it's trading platform.
 ## latest data
 (today <- Sys.Date())
-[1] "2025-04-18"
+[1] "2025-05-09"
 
+https://www.emstradepoint.co.nz/documents/712/NZUTrades_Sn5dmiG.csv
 # download trades data
-https://www.emstradepoint.co.nz/documents/698/NZUTrades_NymdlpZ.csv
-NZUTrades_NymdlpZ <- read.csv( file = "https://www.emstradepoint.co.nz/documents/698/NZUTrades_NymdlpZ.csv")
+
+NZUTrades_Sn5dmiG <- read.csv( file = "https://www.emstradepoint.co.nz/documents/712/NZUTrades_Sn5dmiG.csv")
 
 # Create a .csv formatted data file
-write.csv(NZUTrades_NymdlpZ, file = "NZUTrades_NymdlpZ.csv", row.names = FALSE)
+write.csv(NZUTrades_Sn5dmiG, file = "NZUTrades_Sn5dmiG.csv", row.names = FALSE)
+# make second dataframe to use
+NZUTrades <- NZUTrades_Sn5dmiG
 
-str(NZUTrades_NymdlpZ)
+str(NZUTrades)
 'data.frame':	600 obs. of  11 variables:
- $ Trade.ID        : int  29380 29349 29333 29332 29271 29270 29269 29268 29262 29261 ...
- $ Date...Time     : chr  "4/11/2025 14:13" "4/9/2025 14:56" "4/8/2025 12:56" "4/8/2025 12:46" ...
+ $ Trade.ID        : int  29627 29626 29625 29610 29609 29603 29597 29583 29526 29525 ...
+ $ Date...Time     : chr  "5/1/2025 13:20" "5/1/2025 12:02" "5/1/2025 10:58" "4/30/2025 10:57" ...
  $ Product         : chr  "CP-NZU" "CP-NZU" "CP-NZU" "CP-NZU" ...
- $ Delivery.Date   : chr  "15-Apr-25" "11-Apr-25" "10-Apr-25" "10-Apr-25" ...
- $ Quantity        : int  110 536 1000 1500 300 100 234 1000 1000 100 ...
- $ Unit.Price      : num  54.5 54.5 54.8 55 55 ...
- $ Total.Quantity  : int  110 536 1000 1500 300 100 234 1000 1000 100 ...
- $ Value           : num  5995 29212 54750 82425 16500 ...
- $ Off.Market.Trade: chr  "" "" "" "" ...
- $ Broker          : chr  "N" "N" "N" "N" ...
- $ Anonymous       : chr  "Y" "Y" "Y" "Y" ...
-#'data.frame':	600 obs. of  11 variables:
- $ Trade.ID        : int  29271 29270 29269 29268 29262 29261 29260 29259 29248 29246 ...
- $ Date...Time     : chr  "4/4/2025 12:15" "4/4/2025 12:15" "4/4/2025 12:14" "4/4/2025 11:19" ...
- $ Product         : chr  "CP-NZU" "CP-NZU" "CP-NZU" "CP-NZU" ...
- $ Delivery.Date   : chr  "8-Apr-25" "8-Apr-25" "8-Apr-25" "8-Apr-25" ...
- $ Quantity        : int  300 100 234 1000 1000 100 1203 829 1500 1000 ...
- $ Unit.Price      : num  55 55 54 55 56 ...
- $ Total.Quantity  : int  300 100 234 1000 1000 100 1203 829 1500 1000 ...
- $ Value           : num  16500 5500 12636 55000 55950 ...
- $ Off.Market.Trade: chr  "" "" "" "" ...
- $ Broker          : chr  "N" "N" "N" "N" ...
+ $ Delivery.Date   : chr  "5-May-25" "20-May-25" "5-May-25" "2-May-25" ...
+ $ Quantity        : int  200 3430 1000 155 200 1000 1500 250 250 570 ...
+ $ Unit.Price      : num  50.2 51 50 48 48 ...
+ $ Total.Quantity  : int  200 3430 1000 155 200 1000 1500 250 250 570 ...
+ $ Value           : num  10050 174930 50000 7440 9600 ...
+ $ Off.Market.Trade: chr  "" "Off Market Trade" "" "" ...
+ $ Broker          : chr  "N" "Y" "N" "N" ...
  $ Anonymous       : chr  "Y" "Y" "Y" "Y" ...
 
-NZUTrades_NymdlpZ[["Date...Time"]][1]             # most recent trade date
-[1] "4/11/2025 14:13"
+
+NZUTrades[["Date...Time"]][1]             # most recent trade date
+[1] "5/1/2025 13:20"
+#[1] "4/23/2025 14:35"
+#[1] "4/11/2025 14:13"
 #[1] "4/4/2025 12:15"
 #[1] "3/21/2025 17:49"
 #[1] "2/27/2025 13:58"
 #[1] "2/14/2025 10:07"
 
-NZUTrades_NymdlpZ[["Date...Time"]][600]             # earliest trade date is 3 May 2024
-[1] "5/7/2024 11:37"
+NZUTrades[["Date...Time"]][600]             # earliest trade date is 17 May 2024
+[1] "5/17/2024 19:31"
+#[1] "5/13/2024 19:56"
+#[1] "5/7/2024 11:37"
 #[1] "5/3/2024 13:13"
-NZUTrades_NymdlpZ[["Delivery.Date"]][600]
-[1] "9-May-24"
+NZUTrades[["Delivery.Date"]][600]
+[1] "21-May-24"
+#[1] "15-May-24"
+#[1] "9-May-24"
 #[1] "7-May-24"
-
 #[1] "4/23/2024 14:28"
 #[1] "4/9/2024 14:58"
 # [1] "3/8/2024 13:02"
@@ -88,8 +85,8 @@ CARBON_TRADE_DATA_24_05_24[["Date...Time"]][989]
 [1] "17/02/2021 9:56"                                               # that is the first trade
 
 --------------------------------------------------------------------------
-# the two dataframes include all trades sinces trading started in 17/02/2021 with over lap 3/05/2024 to 27/05/2024
-NZUTrades_NymdlpZ           starts  7/05/2024    ends  11/04/2025
+# the two dataframes include all trades sinces trading started in 17/02/2021 with overlap from 23/05/2024 to 17/05/2024
+NZUTrades                   starts  17/05/2024    ends  05/05/2025
 CARBON_TRADE_DATA_24_05_24  starts 17/02/2021    ends 23/05/2024
 
 # the two dataframes include all trades sinces trading started in 17/02/2021 with over lap 7/05/2024 to 23/05/2024
@@ -97,39 +94,49 @@ CARBON_TRADE_DATA_24_05_24  starts 17/02/2021    ends 23/05/2024
 CARBON_TRADE_DATA_24_05_24
 
 # reformat date columns - check the first date row 1
-NZUTrades_NymdlpZ[["Date...Time"]][1]
-[1] "4/11/2025 14:13"
+NZUTrades[["Date...Time"]][1]
+[1] "4/23/2025 14:35"
+#[1] "4/11/2025 14:13"
 #[1] "4/4/2025 12:15"
 #[1] "3/21/2025 17:49"
 # what is the class?
-class(NZUTrades_NymdlpZ[["Date...Time"]][1])
+class(NZUTrades[["Date...Time"]][1])
 [1] "character"
-strptime(NZUTrades_NymdlpZ.csv[["Date...Time"]][1],format= "%m/%d/%Y %H:%M")
-[1] "2025-04-11 14:13:00 NZST"
+strptime(NZUTrades[["Date...Time"]][1],format= "%m/%d/%Y %H:%M")
+[1] "2025-05-01 13:20:00 NZST"
+#[1] "2025-04-23 14:35:00 NZST"
+#[1] "2025-04-11 14:13:00 NZST"
 #[1] "2025-04-04 12:15:00 NZDT"
-class(strptime(NZUTrades_NymdlpZ.csv[["Date...Time"]][1],format= "%m/%d/%Y %H:%M"))
+class(strptime(NZUTrades[["Date...Time"]][1],format= "%m/%d/%Y %H:%M"))
 [1] "POSIXlt" "POSIXt"
 # format to strptime date time NOTE its %m/%d/%Y mm/dd/yyyy
-NZUTrades_NymdlpZ[["Date...Time"]] <- strptime(NZUTrades_NymdlpZ[["Date...Time"]],format= "%m/%d/%Y %H:%M")
+NZUTrades[["Date...Time"]] <- strptime(NZUTrades[["Date...Time"]],format= "%m/%d/%Y %H:%M")
 
 # check date again
-str(NZUTrades_NymdlpZ[["Date...Time"]][1],format= "%m/%d/%Y %H:%M")
- POSIXlt[1:1], format: "2025-04-11 14:13:00"
-#POSIXlt[1:1], format: "2025-04-04 12:15:00"
+str(NZUTrades[["Date...Time"]][1],format= "%m/%d/%Y %H:%M")
+ POSIXlt[1:1], format: "2025-05-01 13:20:00"
+# POSIXlt[1:1], format: "2025-04-23 14:35:00"
+# POSIXlt[1:1], format: "2025-04-11 14:13:00"
+# POSIXlt[1:1], format: "2025-04-04 12:15:00"
 
 # format to date time NOTE input is %d/%m/%Y dd/mm/yyyy and output is yyyy-mm-dd
-NZUTrades_NymdlpZ[["Delivery.Date"]] <- as.Date(NZUTrades_NymdlpZ[["Delivery.Date"]],format= "%d-%b-%y")
-str(NZUTrades_NymdlpZ[["Delivery.Date"]][1])
-Date[1:1], format: "2025-04-15"
+NZUTrades[["Delivery.Date"]] <- as.Date(NZUTrades[["Delivery.Date"]],format= "%d-%b-%y")
+# check format
+str(NZUTrades[["Delivery.Date"]][1])
+ Date[1:1], format: "2025-05-05"
+#Date[1:1], format: "2025-04-28"
+#Date[1:1], format: "2025-04-15"
 #Date[1:1], format: "2025-04-08"
 --------------------------------------------------------------------------
 
 # reformat date columns - check the first date row 1
-str(NZUTrades_NymdlpZ[["Date...Time"]][1])
- POSIXlt[1:1], format: "2025-04-11 14:13:00"
+str(NZUTrades[["Date...Time"]][1])
+ POSIXlt[1:1], format: "2025-05-01 13:20:00"
+# POSIXlt[1:1], format: "2025-04-23 14:35:00"
+#POSIXlt[1:1], format: "2025-04-11 14:13:00"
 #POSIXlt[1:1], format: "2025-04-04 12:15:00"
 # what is the class?
-class(NZUTrades_NymdlpZ[["Date...Time"]][1])
+class(NZUTrades[["Date...Time"]][1])
 [1] "POSIXlt" "POSIXt"
 
 ---------------------------------------
@@ -172,23 +179,30 @@ names(CARBON_TRADE_DATA_24_05_24)[4]  <- "Delivery.Date"
 
 # merge or rbind dataframes
 # use rbind as the column names and number are identical
-trades <- rbind(NZUTrades_NymdlpZ, CARBON_TRADE_DATA_24_05_24)
+trades <- rbind(NZUTrades, CARBON_TRADE_DATA_24_05_24)
 # Full join - Keep 1 each of all rows by 'id' and 'date' of both data frames
 # trades <- merge(x = CARBON_TRADE_DATA_24_05_24, y = NZUTrades_94O1l9s, by = "Trade.ID", all.x = TRUE, all.y = TRUE)     # Full join - Keep 1 each of all rows by 'id' of both data frames
 str(trades)
-
-table(duplicated(uniquetrades[["Trade.ID"]]))
+'data.frame':	1589 obs. of  11 variables:
+ $ Trade.ID        : int  29526 29525 29524 29523 29474 29458 29452 29449 29442 29441 ...
+ $ Date...Time     : POSIXlt, format: "2025-04-23 14:35:00" "2025-04-23 10:08:00" ...
+ $ Product         : chr  "CP-NZU" "CP-NZU" "CP-NZU" "CP-NZU" ...
+ $ Delivery.Date   : Date, format: "2025-04-28" "2025-04-28" ...
+ $ Quantity        : int  250 570 48 48 462 444 1322 540 138 378 ...
+ $ Unit.Price      : num  50.5 53 52 51 50 50 49.5 50 50 50 ...
 
 # Remove duplicated rows
 table(duplicated(trades[["Trade.ID"]]))
 FALSE  TRUE
- 1561   28
+ 1584    5
 
 uniquetrades <- trades[!duplicated(trades[["Trade.ID"]]), ]
 table(duplicated(uniquetrades[["Trade.ID"]]))
 FALSE
- 1561
+ 1584
 str(uniquetrades)
+
+table(duplicated(uniquetrades[["Trade.ID"]]))
 
 # save the raw downloaded .csv data file
 write.csv(uniquetrades, file = "uniquetrades.csv", row.names = FALSE)
@@ -196,7 +210,9 @@ write.csv(uniquetrades, file = "uniquetrades.csv", row.names = FALSE)
 #uniquetrades <- read.csv("uniquetrades.csv")
 # last trade
 uniquetrades[["Date...Time"]][1]
-[1] "2025-04-11 14:13:00 NZST"
+[1] "2025-05-01 13:20:00 NZST"
+#[1] "2025-04-23 14:35:00 NZST"
+#[1] "2025-04-11 14:13:00 NZST"
 #[1] "2025-04-04 12:15:00 NZDT"
 # first trade
 uniquetrades[["Date...Time"]][nrow(uniquetrades)]
@@ -204,7 +220,9 @@ uniquetrades[["Date...Time"]][nrow(uniquetrades)]
 #[1] "2021-02-17 09:56:00 NZDT"
 
 str(uniquetrades[["Date...Time"]][1])
- POSIXlt[1:1], format: "2025-04-11 14:13:00"
+ POSIXlt[1:1], format: "2025-05-01 13:20:00"
+# POSIXlt[1:1], format: "2025-04-23 14:35:00"
+# POSIXlt[1:1], format: "2025-04-11 14:13:00"
 # POSIXlt[1:1], format: "2025-04-04 12:15:00"
 
 # Create a .csv formatted data file
@@ -221,7 +239,7 @@ plot(uniquetrades[["Date...Time"]], uniquetrades[["Unit.Price"]] ,ylim=c(0,95),t
 points(uniquetrades[["Date...Time"]], uniquetrades[["Unit.Price"]] ,col="#9F116D",pch=20,cex=0.9)
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
-mtext(side=1,cex=1,line=-1.1,"Data: Carbon https://www.emstradepoint.co.nz/#downloads")
+mtext(side=1,cex=1,line=-1.1,"Data: https://www.emstradepoint.co.nz/#downloads")
 mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint New Zealand Unit trading prices")) )
 mtext(side=2,cex=1, line=-1.3,"$NZ Dollars/tonne")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
@@ -231,8 +249,12 @@ dev.off()
 tail(uniquetrades[["Date...Time"]],1)
 [1] "2021-02-17 09:56:00 NZDT"
 head(uniquetrades[["Date...Time"]],1)
-[1] "2025-04-11 14:13:00 NZST"
+[1] "2025-05-01 13:20:00 NZST"
+#[1] "2025-04-23 14:35:00 NZST"
+#[1] "2025-04-11 14:13:00 NZST"
 #[1] "2025-03-21 17:49:00 NZDT"
+str(uniquetrades[["Date...Time"]],1)
+ POSIXlt[1:1584], format: "2025-05-01 13:20:00" "2025-05-01 12:02:00" "2025-05-01 10:58:00" ...
 
 ## remove duplicated indexes with zoo by median (or with average) with Date...Time dates
 # on some days there are more than one trade which may be at different prices 'Aggregate' function applied to a zoo matrix can calculate a median price for all trades by day
@@ -247,50 +269,56 @@ In zoo(x = uniquetrades[["Unit.Price"]], order.by = uniquetrades[["Date...Time"]
 # yes we know there are sometimes multiple prices in a day..
 str(uniquetradeszoo)
 ‘zoo’ series from 2021-02-17 09:56:00 to 2025-02-14 10:07:00
-  Data: num [1:1561] 40 39 39 39 41.1 ...
-  Index:  POSIXlt[1:1561], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
+  Data: num [1:1584] 40 39 39 39 41.1 ...
+  Index:  POSIXlt[1:1584], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
+tail(uniquetradeszoo)
+2025-04-29 13:32:00 2025-04-29 17:34:00 2025-04-30 10:57:00 2025-05-01 10:58:00
+              45.00               48.00               48.00               50.00
+2025-05-01 12:02:00 2025-05-01 13:20:00
+              51.00               50.25
 
 # aggregate by day to get median daily prices
-dailymedianprices <- aggregate(uniquetradeszoo, as.Date(cut(time(uniquetradeszoo), "day")), median)
+dailymedianprices <- aggregate(uniquetradeszoo, by=as.Date(time(uniquetradeszoo)), median)
+
 str(dailymedianprices)
 ‘zoo’ series from 2021-02-17 to 2025-02-27
-  Data: num [1:567] 40 39 39 39 41.1 ...
-  Index:  Date[1:567], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-05" "2021-05-16" ...
+  Data: num [1:577] 40 39 39 39 41.1 ...
+  Index:  Date[1:577], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-05" "2021-05-16" ...
 
 # aggregate by year to calculate number of trades per annum
 # create a zoo matrix with price =1 and all the dates
 # dummy prices 1 x nrow(uniquetrades)
 pricesdummy <- rep(1,nrow(uniquetrades))
+
 uniquetradesyearzoo <- zoo(x = pricesdummy , order.by = uniquetrades[["Date...Time"]])
 str(uniquetradesyearzoo)
 ‘zoo’ series from 2021-02-17 09:56:00 to 2025-02-14 10:07:00
-  Data: num [1:1561] 1 1 1 1 1 1 1 1 1 1 ...
-  Index:  POSIXlt[1:1561], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
+  Data: num [1:1584] 1 1 1 1 1 1 1 1 1 1 ...
+  Index:  POSIXlt[1:1584], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
 
 # how many trades each year?
 tradesperannum <- aggregate(uniquetradesyearzoo, as.Date(cut(time(uniquetradesyearzoo), "year")), sum)
 
 str(tradesperannum)
 ‘zoo’ series from 2021-01-01 to 2025-01-01
-  Data: num [1:5] 37 252 515 548 209
+  Data: num [1:5] 37 252 515 548 232
   Index:  Date[1:5], format: "2021-01-01" "2022-01-01" "2023-01-01" "2024-01-01" "2025-01-01"
 
 sum(coredata(tradesperannum))
-[1] 1561
+[1] 1584
 
 # create chart of trades by year
 svg(filename="NZUtradesEmsTradePoint-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 par(mar=c(3,3,3,1)+0.1)
 barplot(tradesperannum,las=1,xlab="NZU trades per annum",col="#9F116D")  # colour is  Jazzberry Jam dark purple)
-mtext(side=3,cex=1.5, line=0.25,expression(paste("emsTradepoint NZU trades by year")))
+mtext(side=3,cex=1.5, line=0.25,expression(paste("emsTradepoint annual volume of NZU trades")))
 dev.off()
-
 
 
 # create dataframe of dates and prices from the zoo matrix
 dailymedianpricesdataframe <- data.frame(date = index(dailymedianprices),price= round(coredata(dailymedianprices),2))
-str(dailymedianpricesdataframe)
-'data.frame':	567 obs. of  2 variables:
+str(dailymedianpricesdataframe3)
+'data.frame':	577 obs. of  2 variables:
  $ date : Date, format: "2021-02-17" "2021-03-03" ...
  $ price: num  40 39 39 39 41.1 ...
 
@@ -303,7 +331,15 @@ head(dailymedianpricesdataframe,1)
 1 2021-02-17    40
 tail(dailymedianpricesdataframe,1)
           date price
-567 2025-04-10  54.5
+577 2025-05-01 50.25
+#          date price
+#577 2025-05-01 50.25
+#  date price
+#577 2025-04-30 50.25  date price
+#          date price
+#573 2025-04-22  51.5
+#          date price
+#567 2025-04-10  54.5
 ## chart
 # what should the y axis limit be?
 max(dailymedianpricesdataframe[["price"]] )
@@ -313,12 +349,12 @@ colour [1] "#E41A1C" Alizarin Crimson,
 # create chart of dataframe of unique trades by date time and price
 svg(filename="NZUpriceEmsTradePointMedian-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
 par(mar=c(2.7,2.7,1,1)+0.1)
-plot(dailymedianprices, ylim=c(0,95),tck=0.01,xlab="",ylab="",ann=TRUE, las=1,col="#E41A1C",lwd=1,type='l',lty=1)
-points(dailymedianprices ,col="#E41A1C",pch=20,cex=0.9)
+plot(dailymedianprices3, ylim=c(0,95),tck=0.01,xlab="",ylab="",ann=TRUE, las=1,col="#E41A1C",lwd=1,type='l',lty=1)
+points(dailymedianprices3 ,col="#E41A1C",pch=20,cex=0.9)
 grid(col="darkgray",lwd=1)
 axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
-mtext(side=1,cex=1,line=-1.3,"Data: 'NZU prices' https://www.emstradepoint.co.nz/#downloads")
-mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint median daily price New Zealand Unit trading")) )
+mtext(side=1,cex=1,line=-1.3,"Data: https://www.emstradepoint.co.nz/#downloads")
+mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint median daily prices of New Zealand Unit trading")) )
 mtext(side=2,cex=1, line=-1.3,"$NZ Dollars/tonne")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
 dev.off()
@@ -466,8 +502,15 @@ legend("bottom", inset=c(0.0,0.0) ,bty="n", legend=c("ECMI monthly index","ECQI 
 dev.off()
 
 ## older data files
+#(today <- Sys.Date())
+#[1] "2025-04-18"
+
+# download trades data
+#https://www.emstradepoint.co.nz/documents/698/NZUTrades_NymdlpZ.csv
+#NZUTrades_NymdlpZ <- read.csv( file = "https://www.emstradepoint.co.nz/documents/698/NZUTrades_NymdlpZ.csv")
+
 #[1] "2025-04-07"
-https://www.emstradepoint.co.nz/documents/695/NZUTrades_NymdlpZ.csv.csv
+#https://www.emstradepoint.co.nz/documents/695/NZUTrades_NymdlpZ.csv.csv
 #[1] "2025-03-31"
 # https://www.emstradepoint.co.nz/documents/692/NZUTrades_n1nMz0Y.csv
 
