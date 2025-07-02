@@ -345,23 +345,22 @@ In zoo(x = uniquetrades[["Unit.Price"]], order.by = uniquetrades[["Date...Time"]
 # yes we know there are sometimes multiple prices in a day..
 str(uniquetradeszoo)
 ‘zoo’ series from 2021-02-17 09:56:00 to 2025-05-19 15:32:00
-  Data: num [1:1612] 40 39 39 39 41.1 ...
-  Index:  POSIXlt[1:1612], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
+  Data: num [1:1672] 40 39 39 39 41.1 ...
+  Index:  POSIXlt[1:1672], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
 
 tail(uniquetradeszoo)
-2025-04-29 13:32:00 2025-04-29 17:34:00 2025-04-30 10:57:00 2025-05-01 10:58:00
-              45.00               48.00               48.00               50.00
-2025-05-01 12:02:00 2025-05-01 13:20:00
-              51.00               50.25
+2025-06-23 15:27:00 2025-06-24 11:16:00 2025-06-24 11:16:00 2025-06-24 13:45:00
+               58.5                59.0                59.0                59.0
+2025-06-24 14:39:00 2025-06-25 09:09:00
+               59.0                59.0
 
 # aggregate by day to get median daily prices
 dailymedianprices <- aggregate(uniquetradeszoo, by=as.Date(time(uniquetradeszoo)), median)
 
 str(dailymedianprices)
-‘zoo’ series from 2021-02-17 to 2025-05-19
-  Data: num [1:587] 40 39 39 39 41.1 ...
-  Index:  Date[1:587], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-06" "2021-05-17" ...
-
+‘zoo’ series from 2021-02-17 to 2025-06-25
+  Data: num [1:607] 40 39 39 39 41.1 ...
+  Index:  Date[1:607], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-06" "2021-05-17" ..
 # aggregate by year to calculate number of trades per annum
 # create a zoo matrix with price =1 and all the dates
 # dummy prices 1 x nrow(uniquetrades)
@@ -370,19 +369,22 @@ pricesdummy <- rep(1,nrow(uniquetrades))
 uniquetradesyearzoo <- zoo(x = pricesdummy , order.by = uniquetrades[["Date...Time"]])
 str(uniquetradesyearzoo)
 ‘zoo’ series from 2021-02-17 09:56:00 to 2025-05-19 15:32:00
-  Data: num [1:1612] 1 1 1 1 1 1 1 1 1 1 ...
-  Index:  POSIXlt[1:1612], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
+  Data: num [1:1672] 1 1 1 1 1 1 1 1 1 1 ...
+  Index:  POSIXlt[1:1672], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
 
 # how many trades each year?
 tradesperannum <- aggregate(uniquetradesyearzoo, as.Date(cut(time(uniquetradesyearzoo), "year")), sum)
 
 str(tradesperannum)
 ‘zoo’ series from 2021-01-01 to 2025-01-01
-  Data: num [1:5] 37 252 515 548 260
+  Data: num [1:5] 37 252 515 548 320
   Index:  Date[1:5], format: "2021-01-01" "2022-01-01" "2023-01-01" "2024-01-01" "2025-01-01"
+#‘zoo’ series from 2021-01-01 to 2025-01-01
+#  Data: num [1:5] 37 252 515 548 260
+#  Index:  Date[1:5], format: "2021-01-01" "2022-01-01" "2023-01-01" "2024-01-01" "2025-01-01"
 
 sum(coredata(tradesperannum))
-[1] 1612
+[1] 1672
 
 # create bar chart of trades by year
 svg(filename="NZUtradesEmsTradePoint-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
@@ -395,14 +397,9 @@ dev.off()
 # create dataframe of dates and prices from the zoo matrix
 dailymedianpricesdataframe <- data.frame(date = index(dailymedianprices),price= round(coredata(dailymedianprices),2))
 str(dailymedianpricesdataframe)
-'data.frame':	587 obs. of  2 variables:
+'data.frame':	607 obs. of  2 variables:
  $ date : Date, format: "2021-02-17" "2021-03-03" ...
- $ price: num  40 39 39 39 41.1 ..
-
-#'data.frame':	577 obs. of  2 variables:
-# $ date : Date, format: "2021-02-17" "2021-03-03" ...
-# $ price: num  40 39 39 39 41.1 ...
-
+ $ price: num  40 39 39 39 41.1 ...
 # write a csv file
 write.csv(dailymedianpricesdataframe, file = "dailymedianprices.csv", row.names = FALSE)
 #dailymedianpricesdataframe <- read.csv("dailymedianprices.csv",colClasses =c("Date","numeric"))
@@ -412,7 +409,7 @@ head(dailymedianpricesdataframe,1)
 1 2021-02-17    40
 tail(dailymedianpricesdataframe,1)
           date price
-587 2025-05-19  55.5
+607 2025-06-25    59
 
 ## chart
 # what should the y axis limit be?
@@ -431,6 +428,7 @@ mtext(side=1,cex=1,line=-1.3,"Data: https://www.emstradepoint.co.nz/#downloads")
 mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint median daily prices of New Zealand Unit trading")) )
 mtext(side=2,cex=1, line=-1.3,"$NZ Dollars/tonne")
 mtext(side=4,cex=0.75, line=0.05,R.version.string)
+mtext(side=4,cex=0.75, line=0.05, adj=0, Sys.Date())
 dev.off()
 
 # subset 2024 and 2025 prices
