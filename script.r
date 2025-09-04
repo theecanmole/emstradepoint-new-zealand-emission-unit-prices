@@ -3,32 +3,33 @@
 # The energy trading company emsTradepoint publishs New Zealand Unit (carbon) prices from it's trading platform.
 ## latest data
 (today <- Sys.Date())
-[1] "2025-08-09"
-
+[1] "2025-09-04"
 # download latest trades data
-NZUTrades_hj8DRbv <- read.csv( file = "https://www.emstradepoint.co.nz/documents/758/NZUTrades_hj8DRbv.csv" ,header = FALSE)
+NZUTrades_4XYvZq5 <- read.csv( file = "https://www.emstradepoint.co.nz/documents/777/NZUTrades_4XYvZq5.csv" ,header = TRUE)
+# check structure of dataframe
+str(NZUTrades_4XYvZq5)
 
 # Create and write a .csv formatted data file
-write.csv(NZUTrades_hj8DRbv, file = "NZUTrades_hj8DRbv.csv", row.names = FALSE)
+write.csv(NZUTrades_4XYvZq5, file = "NZUTrades_4XYvZq5.csv", row.names = FALSE)
 
 # make second dataframe to use
-NZUTrades <- NZUTrades_hj8DRbv
+NZUTrades <- NZUTrades_4XYvZq5
 
 str(NZUTrades)
-'data.frame':	600 obs. of  11 variables:
- $ V1 : int  31188 31185 31184 31178 31177 31156 31146 31145 31144 31133 ...
- $ V2 : chr  "8/1/2025 17:00" "8/1/2025 16:16" "8/1/2025 16:03" "8/1/2025 12:45" ...
- $ V3 : chr  "CP-NZU" "CP-NZU" "CP-NZU" "CP-NZU" ...
- $ V4 : chr  "5-Aug-25" "5-Aug-25" "5-Aug-25" "5-Aug-25" ...
- $ V5 : int  500 500 500 328 1000 39 92 403 74 450 ...
- $ V6 : num  57 56.5 56.5 56 56 55.5 56 56 56 56 ...
- $ V7 : int  500 500 500 328 1000 39 92 403 74 450 ...
- $ V8 : num  28500 28250 28250 18368 56000 ...
- $ V9 : chr  "" "" "" "" ...
- $ V10: chr  "N" "N" "N" "N" ...
- $ V11: chr  "Y" "Y" "Y" "Y" ...
+'data.frame':	601 obs. of  11 variables:
+ $ V1 : chr  "Trade ID" "31489" "31482" "31481" ...
+ $ V2 : chr  "Date / Time" "8/29/2025 13:25" "8/28/2025 12:05" "8/28/2025 12:05" ...
+ $ V3 : chr  "Product" "CP-NZU" "CP-NZU" "CP-NZU" ...
+ $ V4 : chr  "Delivery Period" "2-Sep-25" "1-Sep-25" "1-Sep-25" ...
+ $ V5 : chr  "Quantity" "162" "500" "500" ...
+ $ V6 : chr  " Unit Price " "57" "57" "57" ...
+ $ V7 : chr  "Total Quantity" "162" "500" "500" ...
+ $ V8 : chr  "Value" "9234" "28500" "28500" ...
+ $ V9 : chr  "Off Market Trade" "" "" "" ...
+ $ V10: chr  "Broker" "N" "N" "N" ...
+ $ V11: chr  "Anonymous" "Y" "Y" "Y" ...
 
-# add col names read in older csv file
+# add col names read in from the older csv file
 NZUTrades_94O1l9s <- read.csv("olderdata/NZUTrades_94O1l9s.csv")
 names(NZUTrades) <- names(NZUTrades_94O1l9s)
 str(NZUTrades)
@@ -47,7 +48,8 @@ str(NZUTrades)
 
 # check most recent trading dates
 NZUTrades[["Date...Time"]][1]             # most recent trade date
-[1] "8/1/2025 17:00"
+[1] "8/29/2025 13:25"
+#[1] "8/1/2025 17:00"
 #[1] "6/25/2025 9:09"
 #[1] "5/19/2025 15:32"
 #[1] "5/16/2025 16:45"
@@ -60,11 +62,12 @@ NZUTrades[["Date...Time"]][1]             # most recent trade date
 #[1] "2/14/2025 10:07"
 
 # rows 571 to 600 are NAs
-NZUTrades[["Date...Time"]][571]
+NZUTrades[["Date...Time"]][511]
 [1] ""
-# earliest trade date is  20 Aug 2024 #8 July 2024
-NZUTrades[["Date...Time"]][570]
-[1] "8/20/2024 8:00"
+# earliest trade date is  25 Sept
+NZUTrades[["Date...Time"]][510]
+[1] "9/25/2024 17:00"
+#[1] "8/20/2024 8:00"
 #[1] "7/8/2024 12:55"
 #[1] "6/4/2024 19:20"
 #[1] "6/3/2024 19:37"
@@ -74,8 +77,9 @@ NZUTrades[["Date...Time"]][570]
 #[1] "5/3/2024 13:13"
 
 # check earliest delivery date            # if follows date of trade by 2 days
-NZUTrades[["Delivery.Date"]][570]
-[1] "22-Aug-24"
+NZUTrades[["Delivery.Date"]][510]
+[1] "27-Sep-24"
+#[1] "22-Aug-24"
 #[1] "10-Jul-24"
 #[1] "6-Jun-24"
 #[1] "5-Jun-24"
@@ -280,31 +284,34 @@ str(trades)
  $ Broker          : chr  "N" "N" "N" "N" ...
  $ Anonymous       : chr  "Y" "Y" "Y" "Y" ...
 
-# Remove duplicated rows
+# check for duplicated rows
 table(duplicated(trades[["Trade.ID"]]))
 FALSE  TRUE
- 1708   451
+ 1729   430
+#FALSE  TRUE
+# 1708   451
 # FALSE  TRUE
 # 1672   487
 # FALSE  TRUE
 # 1612   547
 # FALSE  TRUE
 # 1584    5
-
+# remove duplicated rows
 uniquetrades <- trades[!duplicated(trades[["Trade.ID"]]), ]
+# check there are no duplicated rows
 table(duplicated(uniquetrades[["Trade.ID"]]))
 FALSE
-1708
+1729
 str(uniquetrades)
-'data.frame':	1708 obs. of  11 variables:
- $ Trade.ID        : int  31188 31185 31184 31178 31177 31156 31146 31145 31144 31133 ...
- $ Date...Time     : POSIXlt, format: "2025-08-01 17:00:00" "2025-08-01 16:16:00" ...
+'data.frame':	1729 obs. of  11 variables:
+ $ Trade.ID        : int  31489 31482 31481 31467 31466 31465 31454 31389 31383 31349 ...
+ $ Date...Time     : POSIXlt, format: "2025-08-29 13:25:00" "2025-08-28 12:05:00" ...
  $ Product         : chr  "CP-NZU" "CP-NZU" "CP-NZU" "CP-NZU" ...
- $ Delivery.Date   : Date, format: "2025-08-05" "2025-08-05" ...
- $ Quantity        : int  500 500 500 328 1000 39 92 403 74 450 ...
- $ Unit.Price      : num  57 56.5 56.5 56 56 55.5 56 56 56 56 ...
- $ Total.Quantity  : int  500 500 500 328 1000 39 92 403 74 450 ...
- $ Value           : num  28500 28250 28250 18368 56000 ...
+ $ Delivery.Date   : Date, format: "2025-09-02" "2025-09-01" ...
+ $ Quantity        : int  162 500 500 1000 400 750 1000 1000 500 500 ...
+ $ Unit.Price      : num  57 57 57 56.5 56.2 ...
+ $ Total.Quantity  : int  162 500 500 1000 400 750 1000 1000 500 500 ...
+ $ Value           : num  9234 28500 28500 56500 22500 ...
  $ Off.Market.Trade: chr  "" "" "" "" ...
  $ Broker          : chr  "N" "N" "N" "N" ...
  $ Anonymous       : chr  "Y" "Y" "Y" "Y" ...
@@ -317,7 +324,8 @@ write.csv(uniquetrades, file = "uniquetrades.csv", row.names = FALSE)
 #uniquetrades <- read.csv("uniquetrades.csv")
 # last trade
 uniquetrades[["Date...Time"]][1]
-[1] "2025-08-01 17:00:00 NZST"
+[1] "2025-08-29 13:25:00 NZST"
+#[1] "2025-08-01 17:00:00 NZST"
 #[1] "2025-06-25 09:09:00 NZST"
 #[1] "2025-05-19 15:32:00 NZST"
 #[1] "2025-05-01 13:20:00 NZST"
@@ -344,9 +352,9 @@ summary(uniquetrades[["Unit.Price"]] )
 # find the NA
 uniquetrades[is.na(uniquetrades$Unit.Price), ]
     Trade.ID Date...Time Product Delivery.Date Quantity Unit.Price
-571       NA        <NA>                  <NA>       NA         NA
+511       NA        <NA>                  <NA>       NA         NA
     Total.Quantity Value Off.Market.Trade Broker Anonymous
-571             NA    NA
+511             NA    NA
 # remove the NA
 uniquetrades <- uniquetrades[!is.na(uniquetrades$Unit.Price), ]
 
@@ -375,14 +383,15 @@ dev.off()
 tail(uniquetrades[["Date...Time"]],1)
 [1] "2021-02-17 09:56:00 NZDT"
 head(uniquetrades[["Date...Time"]],1)
-1] "2025-08-01 17:00:00 NZST"
+[1] "2025-08-29 13:25:00 NZST"
+#[1] "2025-08-01 17:00:00 NZST"
 #[1] "2025-05-19 15:32:00 NZST"
 #[1] "2025-05-01 13:20:00 NZST"
 #[1] "2025-04-23 14:35:00 NZST"
 #[1] "2025-04-11 14:13:00 NZST"
 #[1] "2025-03-21 17:49:00 NZDT"
 str(uniquetrades[["Date...Time"]],1)
-POSIXlt[1:1707], format: "2025-08-01 17:00:00" "2025-08-01 16:16:00" "2025-08-01 16:03:00" ...
+POSIXlt[1:1728], format: "2025-08-01 17:00:00" "2025-08-01 16:16:00" "2025-08-01 16:03:00" ...
 
 ## create median (or average) daily prices with Zoo
 # on some days there are more than one trade which may be at different prices 'Aggregate' function applied to a zoo matrix can calculate a median price for all trades by day
@@ -396,21 +405,21 @@ In zoo(x = uniquetrades[["Unit.Price"]], order.by = uniquetrades[["Date...Time"]
   some methods for “zoo” objects do not work if the index entries in ‘order.by’ are not unique
 # yes we know there are sometimes multiple prices in a day..
 str(uniquetradeszoo)
-‘zoo’ series from 2021-02-17 09:56:00 to 2025-08-01 17:00:00
-  Data: num [1:1707] 40 39 39 39 41.1 ...
-  Index:  POSIXlt[1:1707], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ..
+‘zoo’ series from 2021-02-17 09:56:00 to 2025-08-29 17:00:00
+  Data: num [1:1728] 40 39 39 39 41.1 ...
+  Index:  POSIXlt[1:1728], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ..
 
 tail(uniquetradeszoo,4)
-2025-08-01 12:45:00 2025-08-01 16:03:00 2025-08-01 16:16:00 2025-08-01 17:00:00
-               56.0                56.5                56.5                57.0
+2025-08-27 15:52:00 2025-08-28 12:05:00 2025-08-28 12:05:00 2025-08-29 13:25:00
+               56.5                57.0                57.0                57.0
 
 # aggregate by day to get median daily prices
 dailymedianprices <- aggregate(uniquetradeszoo, by=as.Date(time(uniquetradeszoo)), median)
 
 str(dailymedianprices)
-‘zoo’ series from 2021-02-17 to 2025-08-01
-  Data: num [1:623] 40 39 39 39 41.1 ...
-  Index:  Date[1:623], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-06" "2021-05-17" ...
+‘zoo’ series from 2021-02-17 to 2025-08-29
+  Data: num [1:633] 40 39 39 39 41.1 ...
+  Index:  Date[1:633], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-06" "2021-05-17" ...
 # aggregate by year to calculate number of trades per annum
 # create a zoo matrix with price =1 and all the dates
 # dummy prices 1 x nrow(uniquetrades)
@@ -418,23 +427,22 @@ pricesdummy <- rep(1,nrow(uniquetrades))
 
 uniquetradesyearzoo <- zoo(x = pricesdummy , order.by = uniquetrades[["Date...Time"]])
 str(uniquetradesyearzoo)
-‘zoo’ series from 2021-02-17 09:56:00 to 2025-08-01 17:00:00
-  Data: num [1:1707] 1 1 1 1 1 1 1 1 1 1 ...
-  Index:  POSIXlt[1:1707], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
-
+‘zoo’ series from 2021-02-17 09:56:00 to 2025-08-29 13:25:00
+  Data: num [1:1728] 1 1 1 1 1 1 1 1 1 1 ...
+  Index:  POSIXlt[1:1728], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
 # how many trades each year?
 tradesperannum <- aggregate(uniquetradesyearzoo, as.Date(cut(time(uniquetradesyearzoo), "year")), sum)
 
 str(tradesperannum)
 ‘zoo’ series from 2021-01-01 to 2025-01-01
-  Data: num [1:5] 37 252 515 548 355
+  Data: num [1:5] 37 252 515 548 376
   Index:  Date[1:5], format: "2021-01-01" "2022-01-01" "2023-01-01" "2024-01-01" "2025-01-01"
-#‘zoo’ series from 2021-01-01 to 2025-01-01
-#  Data: num [1:5] 37 252 515 548 260
-#  Index:  Date[1:5], format: "2021-01-01" "2022-01-01" "2023-01-01" "2024-01-01" "2025-01-01"
+tradesperannum
+2021-01-01 2022-01-01 2023-01-01 2024-01-01 2025-01-01
+        37        252        515        548        376
 
 sum(coredata(tradesperannum))
-[1] 1707
+[1] 1728
 
 # create bar chart of trades by year
 svg(filename="NZUtradesEmsTradePoint-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
@@ -447,9 +455,10 @@ dev.off()
 # create dataframe of dates and prices from the zoo matrix
 dailymedianpricesdataframe <- data.frame(date = index(dailymedianprices),price= round(coredata(dailymedianprices),2))
 str(dailymedianpricesdataframe)
-'data.frame':	623 obs. of  2 variables:
+'data.frame':	633 obs. of  2 variables:
  $ date : Date, format: "2021-02-17" "2021-03-03" ...
  $ price: num  40 39 39 39 41.1 ...
+
 # write a csv file
 write.csv(dailymedianpricesdataframe, file = "dailymedianprices.csv", row.names = FALSE)
 #dailymedianpricesdataframe <- read.csv("dailymedianprices.csv",colClasses =c("Date","numeric"))
@@ -458,8 +467,10 @@ head(dailymedianpricesdataframe,1)
        date price
 1 2021-02-17    40
 tail(dailymedianpricesdataframe,1)
-      date price
-623 2025-08-01  56.5
+          date price
+633 2025-08-29    57
+#      date price
+#623 2025-08-01  56.5
 
 ## chart
 # what should the y axis limit be?
@@ -632,9 +643,11 @@ dev.off()
 
 ## older data files
 (today <- Sys.Date())
+[1] "2025-08-09"
+# download latest trades data
+NZUTrades_hj8DRbv <- read.csv( file = "https://www.emstradepoint.co.nz/documents/758/NZUTrades_hj8DRbv.csv" ,header = FALSE)(today <- Sys.Date())
 [1] "2025-07-02"
 https://www.emstradepoint.co.nz/documents/742/NZUTrades_n8BUSp5.csv
-
 [1] "2025-06-01"
 https://www.emstradepoint.co.nz/documents/723/NZUTrades_pX7or8E.csv
 
