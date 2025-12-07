@@ -196,6 +196,30 @@ mtext(side=4,cex=0.75, line=0.05,R.version.string)
 mtext(side=4,cex=0.75, line=0.05, adj=0, Sys.Date())
 dev.off()
 
+str(Tradesuniqueallsorteddf[["Date...Time"]] )
+# need to change from POZIX to date format
+as.Date(Tradesuniqueallsorteddf[["Date...Time"]][1])
+[1] "2021-02-17"
+class(as.Date(Tradesuniqueallsorteddf[["Date...Time"]][1]))
+[1] "Date"
+
+# create dataframe of dates and prices from the dataframe
+Tradingpricesdataframe <- data.frame(date = as.Date(Tradesuniqueallsorteddf[["Date...Time"]]), price= Tradesuniqueallsorteddf[["Unit.Price"]])
+
+library("ggplot2")
+svg(filename="NZUpriceEmsTradePointspot1-720by540.svg", width = 8, height = 6, pointsize = 16, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+#png("NZUpriceEmsTradePointspot1-720by540.png", bg="white", width=720, height=540)
+ggplot(Tradingpricesdataframe, aes(x = date, y = price)) +
+geom_line(colour = "#ED1A3B") +
+#geom_point(colour = "#ED1A3B") +
+theme_bw(base_size = 14) +
+scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70,80))  +
+scale_x_date(date_breaks = "year", date_labels = "%Y") +
+theme(plot.title = element_text(size = 20, hjust = 0.5, vjust= -8 )) +
+theme(plot.caption = element_text( hjust = 0.5 )) +
+labs(title="emsTradepoint New Zealand Unit (NZU) trading prices", x ="Years", y ="Price $NZD", caption="Data: https://www.emstradepoint.co.nz/#downloads") +
+annotate("text", x= max(Tradingpricesdataframe[["date"]]), y = 2, size = 3, angle = 0, hjust = 1, label=R.version.string)
+dev.off()
 --------------------------------------------------------------------------------------------
 ## Download and format earliest data back to 17 February 2021
 
@@ -558,19 +582,33 @@ max(dailymedianpricesdataframe[["price"]] )
 [1] 88.4
 colour [1] "#E41A1C" Alizarin Crimson,
 
-# create chart of dataframe of unique trades by date time and price
-svg(filename="NZUpriceEmsTradePointMedian-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
-par(mar=c(2.7,2.7,1,1)+0.1)
-plot(dailymedianprices, ylim=c(0,95),tck=0.01,xlab="",ylab="",ann=TRUE, las=1,col="#E41A1C",lwd=1,type='l',lty=1)
-#points(dailymedianprices ,col="#E41A1C",pch=20,cex=0.9)
-grid(col="darkgray",lwd=1)
-axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
-mtext(side=1,cex=1,line=-1.3,"Data: https://www.emstradepoint.co.nz/#downloads\nhttps://github.com/theecanmole/emstradepoint-new-zealand-emission-unit-prices")
-mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint median daily prices of New Zealand Unit trading")) )
-mtext(side=2,cex=1, line=-1.3,"$NZ Dollars/tonne")
-mtext(side=4,cex=0.75, line=0.05,R.version.string)
-mtext(side=4,cex=0.75, line=0.05, adj=0, Sys.Date())
+svg(filename="NZUpriceEmsTradePointMedian-720by540.svg", width = 8, height = 6, pointsize = 16, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+#png("NZUpriceEmsTradePointMedian-720by540.png", bg="white", width=720, height=540)
+ggplot(dailymedianpricesdataframe, aes(x = date, y = price)) +
+geom_line(colour = "#ED1A3B") +
+#geom_point(colour = "#ED1A3B") +
+theme_bw(base_size = 14) +
+scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70,80))  +
+scale_x_date(date_breaks = "year", date_labels = "%Y") +
+theme(plot.title = element_text(size = 18, hjust = 0.5, vjust= -8 )) +
+theme(plot.caption = element_text( hjust = 0.5 )) +
+labs(title="emsTradepoint New Zealand Unit (NZU) median daily prices", x ="Years", y ="Price $NZD", caption="Data: https://github.com/theecanmole/emstradepoint-new-zealand-emission-unit-prices") +
+annotate("text", x= max(dailymedianpricesdataframe[["date"]]), y = 2, size = 3, angle = 0, hjust = 1, label=R.version.string)
 dev.off()
+
+# create chart of dataframe of unique trades by date time and price
+#svg(filename="NZUpriceEmsTradePointMedian-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
+#par(mar=c(2.7,2.7,1,1)+0.1)
+#plot(dailymedianprices, ylim=c(0,95),tck=0.01,xlab="",ylab="",ann=TRUE, las=1,col="#E41A1C",lwd=1,type='l',lty=1)
+#points(dailymedianprices ,col="#E41A1C",pch=20,cex=0.9)
+#grid(col="darkgray",lwd=1)
+#axis(side=4, tck=0.01, las=0,tick=TRUE,labels = FALSE)
+#mtext(side=1,cex=1,line=-1.3,"Data: https://www.emstradepoint.co.nz/#downloads\nhttps://github.com/theecanmole/emstradepoint-new-zealand-emission-unit-prices")
+#mtext(side=3,cex=1.5, line=-2.2,expression(paste("emsTradepoint median daily prices of New Zealand Unit trading")) )
+#mtext(side=2,cex=1, line=-1.3,"$NZ Dollars/tonne")
+#mtext(side=4,cex=0.75, line=0.05,R.version.string)
+#mtext(side=4,cex=0.75, line=0.05, adj=0, Sys.Date())
+#dev.off()
 
 
 ------------------------------------------------------------------------------
