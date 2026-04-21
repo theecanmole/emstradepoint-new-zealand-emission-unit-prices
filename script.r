@@ -2,71 +2,81 @@
 
 # The energy trading company emsTradepoint publishs New Zealand (emission) Unit (carbon) prices from it's trading platform.
 
-## latest data		https://www.emstradepoint.co.nz/documents/867/NZUTrades_ffVEMLm.csv
+## latest data    https://www.emstradepoint.co.nz/documents/873/NZUTrades_4SOzJmK.csv
 
 (today <- Sys.Date())
-[1] "2026-04-11"
+[1] "2026-04-21"
 # download and read in the latest trades data
-NZUTrades_ffVEMLm <- read.csv( file = "https://www.emstradepoint.co.nz/documents/867/NZUTrades_ffVEMLm.csv", header = TRUE)
+NZUTrades_4SOzJmK <- read.csv( file = "https://www.emstradepoint.co.nz/documents/873/NZUTrades_4SOzJmK.csv", header = TRUE)
 
 # Create and write a .csv formatted data file to the working directory
-write.csv(NZUTrades_ffVEMLm, file = "NZUTrades_ffVEMLm.csv", row.names = FALSE)
+write.csv(NZUTrades_4SOzJmK, file = "NZUTrades_4SOzJmK.csv", row.names = FALSE)
 
 # make second dataframe to use edit and reformat
-Tradeslatest <- NZUTrades_ffVEMLm
+Tradeslatest <- NZUTrades_4SOzJmK
 
 str(Tradeslatest)
 'data.frame':	600 obs. of  11 variables:
- $ Trade.ID        : int  34988 34987 34986 34985 34983 34944 34943 34942 34885 34861 ...
- $ Date...Time     : chr  "4/1/2026 12:24" "4/1/2026 12:24" "4/1/2026 12:24" "4/1/2026 12:24" ...
+ $ Trade.ID        : int  35301 35295 35294 35279 35278 35277 35276 35274 35273 35272 ...
+ $ Date...Time     : chr  "4/17/2026 14:40" "4/17/2026 10:59" "4/17/2026 10:59" "4/16/2026 14:34" ...
  $ Product         : chr  "CP-NZU" "CP-NZU" "CP-NZU" "CP-NZU" ...
- $ Delivery.Period : chr  "7-Apr-26" "7-Apr-26" "7-Apr-26" "7-Apr-26" ...
- $ Quantity        : int  50 100 500 6 544 500 100 500 100 150 ...
- $ Unit.Price      : num  41.5 41.5 41.5 41.5 41.5 41.5 41.5 41.5 41.5 42 ...
- $ Total.Quantity  : int  50 100 500 6 544 500 100 500 100 150 ...
- $ Value           : num  2075 4150 20750 249 22576 ...
+ $ Delivery.Period : chr  "21-Apr-26" "21-Apr-26" "21-Apr-26" "20-Apr-26" ...
+ $ Quantity        : int  238 500 1000 128 1000 2000 120 71 1000 200 ...
+ $ Unit.Price      : num  47 46.5 46.3 46.2 47.5 ...
+ $ Total.Quantity  : int  238 500 1000 128 1000 2000 120 71 1000 200 ...
+ $ Value           : num  11186 23250 46300 5920 47500 ...
  $ Off.Market.Trade: chr  "" "" "" "" ...
  $ Broker          : chr  "N" "N" "N" "N" ...
  $ Anonymous       : chr  "Y" "Y" "Y" "Y" ...
-# edit fourth column name
 
+# edit fourth column name
 names(Tradeslatest)[4] <- "Delivery.Date"
 
 str(Tradeslatest)
 
 # check most recent trading dates and time and formats
 Tradeslatest[["Date...Time"]][1]             # most recent trade date is mm-dd-yyyy H:S
-[1] "4/1/2026 12:24"
+[1] "4/17/2026 14:40"
+#[1] "4/1/2026 12:24"
 #[1] "3/8/2026 19:08"
 
 # which is the last row of data?
-Tradeslatest[["Date...Time"]][421]
+Tradeslatest[["Date...Time"]][451]
 [1] ""
-Tradeslatest[["Date...Time"]][420]
-[1] "5/9/2025 13:39"
+Tradeslatest[["Date...Time"]][450]
+[1] "5/15/2025 13:19"
 
-# the earliest dates are the rows at the bottom of the dataframe, and rows 421 to 600 are "" or NAs so delete rows 421 to 600
-Tradeslatest <- Tradeslatest[1:420,]
+# the earliest dates are the rows at the bottom of the dataframe, and rows 451 to 600 are "" or NAs so delete rows 451 to 600
+Tradeslatest <- Tradeslatest[1:450,]
 
 # look at last row of dataframe
 tail(Tradeslatest,1)
-    Trade.ID    Date...Time Product Delivery.Date Quantity Unit.Price
-420    29794 5/9/2025 13:39  CP-NZU     13-May-25     1000         51
+    Trade.ID     Date...Time Product Delivery.Date Quantity Unit.Price
+450    29860 5/15/2025 13:19  CP-NZU     19-May-25     1000       55.5
     Total.Quantity Value Off.Market.Trade Broker Anonymous
-420           1000 51000                       N         Y
+450           1000 55500                       N         Y
+#    Trade.ID    Date...Time Product Delivery.Date Quantity Unit.Price
+#420    29794 5/9/2025 13:39  CP-NZU     13-May-25     1000         51
+#    Total.Quantity Value Off.Market.Trade Broker Anonymous
+#420           1000 51000                       N         Y
 
 # first row
 head(Tradeslatest,1)
-  Trade.ID    Date...Time Product Delivery.Date Quantity Unit.Price
-1    34988 4/1/2026 12:24  CP-NZU      7-Apr-26       50       41.5
+  Trade.ID     Date...Time Product Delivery.Date Quantity Unit.Price
+1    35301 4/17/2026 14:40  CP-NZU     21-Apr-26      238         47
   Total.Quantity Value Off.Market.Trade Broker Anonymous
-1             50  2075                       N         Y
+1            238 11186                       N         Y
+#  Trade.ID    Date...Time Product Delivery.Date Quantity Unit.Price
+#1    34988 4/1/2026 12:24  CP-NZU      7-Apr-26       50       41.5
+#  Total.Quantity Value Off.Market.Trade Broker Anonymous
+#1             50  2075                       N         Y
 
-# earliest trade date is 4/01/2026 in mm/dd/yyyy H:M date format
+# earliest trade date is 04/17/2026 in mm/dd/yyyy H:M date format
 
 # check earliest delivery date # it follows date of trade by  2 to 4 days and is in dd-mmm-yy format
-Tradeslatest[["Delivery.Date"]][420]
-[1] "13-May-25"
+Tradeslatest[["Delivery.Date"]][450]
+[1] "19-May-25"
+#[1] "13-May-25"
 
 # what is the class of the date..time column?
 class(Tradeslatest[["Date...Time"]][1])
@@ -74,7 +84,7 @@ class(Tradeslatest[["Date...Time"]][1])
 
 # how should the date format look like?
 strptime(Tradeslatest[["Date...Time"]][1],format= "%m/%d/%Y %H:%M")
-
+[1] "2026-04-17 14:40:00 NZST"
 # check class if format changed with strptime
 class(strptime(Tradeslatest[["Date...Time"]][1],format= "%m/%d/%Y %H:%M"))
 [1] "POSIXlt" "POSIXt"
@@ -84,7 +94,7 @@ Tradeslatest[["Date...Time"]] <- strptime(Tradeslatest[["Date...Time"]],format= 
 
 # check date again
 str(Tradeslatest[["Date...Time"]])
- POSIXlt[1:420], format: "2026-04-01 12:24:00" "2026-04-01 12:24:00" "2026-04-01 12:24:00"
+POSIXlt[1:450], format: "2026-04-17 14:40:00" "2026-04-17 10:59:00" "2026-04-17 10:59:00" ...
 
 # put in date and trade number order
 Tradeslatest <- Tradeslatest[order(Tradeslatest$Date...Time), ]
@@ -96,13 +106,13 @@ write.csv(Tradeslatest, file = "Tradeslatest.csv", row.names = FALSE)
 -----------------------------------------------------------------------------------------------------------------------------------------------
 ## Merge latest 2025 and earlier trades dataframes
 dim(Tradeslatest)
-[1] 420  11
+[1] 450  11
 
 # read the older csv file back into R
 Tradesuniqueall <- read.csv("Tradesuniqueall.csv")
 # check dimensions
 dim(Tradesuniqueall)
-[1] 1977   11
+[1] 2014   11
 # first row
 head(Tradesuniqueall,1)
   Trade.ID         Date...Time Product Delivery.Date Quantity Unit.Price
@@ -112,9 +122,9 @@ head(Tradesuniqueall,1)
 # last row
 tail(Tradesuniqueall,1)
      Trade.ID         Date...Time Product Delivery.Date Quantity Unit.Price
-1977    34508 2026-03-08 19:08:00  CP-NZU     10-Mar-26      100       44.3
+2014    34988 2026-04-01 12:24:00  CP-NZU      7-Apr-26       50       41.5
      Total.Quantity Value Off.Market.Trade Broker Anonymous
-1977            100  4430                       N         Y
+2014             50  2075                       N         Y
 
 # check if the names are consistent
 identical(names(Tradeslatest), names(Tradesuniqueall))
@@ -124,21 +134,21 @@ identical(names(Tradeslatest), names(Tradesuniqueall))
 Tradesuniqueall <- rbind(Tradeslatest, Tradesuniqueall)
 
 dim(Tradesuniqueall)
-[1] 2397   11
+[1] 2464   11
 
 str(Tradesuniqueall)
 
 # check for duplicated trades by trade id number (rows)
 table(duplicated(Tradesuniqueall[["Trade.ID"]]))
 FALSE  TRUE
-2014   383
+2053   411
 
 # remove duplicated rows
 Tradesuniqueall <- Tradesuniqueall[!duplicated(Tradesuniqueall[["Trade.ID"]]), ]
 # check there are no duplicated rows
 table(duplicated(Tradesuniqueall[["Trade.ID"]]))
 FALSE
-2014
+2053
 # that means there are no duplicate trade id numbers and no duplicated rows
 
 # find the NA
@@ -171,16 +181,14 @@ Tradesuniqueall[is.na(Tradesuniqueall$Unit.Price), ]
 # check for duplicated dates? that is ok as multiple trades can occur on any date
 table(duplicated(Tradesuniqueall[["Date...Time"]]))
 FALSE  TRUE
- 1632   345
+ 1693   360
 # arrange in trade number order
-Tradesuniqueall <- Tradesuniqueall[order(Tradesuniqueall[["Trade.ID"]] ), ]
-#Tradesuniqueall <- Tradesuniqueall[order(Tradesuniqueall$Date...Time), ]
+#Tradesuniqueall <- Tradesuniqueall[order(Tradesuniqueall[["Trade.ID"]] ), ]
+Tradesuniqueall <- Tradesuniqueall[order(Tradesuniqueall$Date...Time), ]
 
 head(Tradesuniqueall,1)
-     Trade.ID         Date...Time Product Delivery.Date Quantity Unit.Price
-1898     9744 2021-02-17 09:56:00  CP-NZU     24-Feb-21      100         40
-     Total.Quantity Value Off.Market.Trade Broker Anonymous
-1898            100  4000                       N         Y
+      Trade.ID         Date...Time Product Delivery.Date Quantity Unit.Price
+11000     9744 2021-02-17 09:56:00  CP-NZU     24-Feb-21      100         40
 
 # Create a .csv formatted data file
 write.csv(Tradesuniqueall, file = "Tradesuniqueall.csv", row.names = FALSE)
@@ -215,16 +223,20 @@ class(as.Date(Tradesuniqueall[["Date...Time"]][1]))
 
 # create dataframe of dates without H or S and prices from the dataframe
 Tradingpricesdataframe <- data.frame(date = as.Date(Tradesuniqueall[["Date...Time"]]), price= Tradesuniqueall[["Unit.Price"]])
+
 str(Tradingpricesdataframe)
-'data.frame':	2014 obs. of  2 variables:
+'data.frame':	2053 obs. of  2 variables:
  $ date : Date, format: "2021-02-17" "2021-03-03" ...
  $ price: num  40 39 39 39 41.1 ...
 
 library("ggplot2")
+
+# color #B80000				Guardsman Red was "#ED1A3B" Alizarin crimson
+
 svg(filename="NZUpriceEmsTradePointspot1-720by540.svg", width = 8, height = 6, pointsize = 16, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
-png("NZUpriceEmsTradePointspot1-720by540.png", bg="white", width=720, height=540)
+#png("NZUpriceEmsTradePointspot1-720by540.png", bg="white", width=720, height=540)
 ggplot(Tradingpricesdataframe, aes(x = date, y = price)) +
-geom_line(colour = "#ED1A3B") +
+geom_line(colour ="#B80000" ) +
 #geom_point(colour = "#ED1A3B") +
 theme_bw(base_size = 14) +
 scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70,80))  +
@@ -254,25 +266,22 @@ In zoo(x = uniquetrades[["Unit.Price"]], order.by = uniquetrades[["Date...Time"]
 # yes we know there are sometimes multiple prices in a day..
 
 str(uniquetradeszoo)
-‘zoo’ series from 2021-02-17 09:56:00 to 2026-04-01 12:24:00
-  Data: num [1:2014] 40 39 39 39 41.1 ...
-  Index:  POSIXlt[1:2014], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
+‘zoo’ series from 2021-02-17 09:56:00 to 2026-04-17 14:40:00
+  Data: num [1:2053] 40 39 39 39 41.1 ...
+  Index:  POSIXlt[1:2053], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
 
 
 tail(uniquetradeszoo,4)
-
-2026-03-06 13:41:00 2026-03-06 13:46:00 2026-03-06 15:27:00 2026-03-08 19:08:00
-               44.3                44.3                44.0                44.3
-#2026-02-23 19:26:00 2026-02-24 08:01:00 2026-02-24 10:06:00 2026-02-25 12:31:00
-#               46.5                46.5                47.0                47.5
+2026-04-16 14:34:00 2026-04-17 10:59:00 2026-04-17 10:59:00 2026-04-17 14:40:00
+              46.25               46.50               46.30               47.00
 
 # aggregate by day to get median daily prices
 dailymedianprices <- aggregate(uniquetradeszoo, by=as.Date(time(uniquetradeszoo)), median)
 
 str(dailymedianprices)
-‘zoo’ series from 2021-02-17 to 2026-02-25
-  Data: num [1:742] 40 39 39 39 41.1 ...
-  Index:  Date[1:742], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-06" "2021-05-17" ...
+‘zoo’ series from 2021-02-17 to 2026-04-17
+  Data: num [1:752] 40 39 39 39 41.1 ...
+  Index:  Date[1:752], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-06" "2021-05-17" ...
 
 # aggregate by year to calculate number of trades per annum
 # create a zoo matrix with price =1 and all the dates
@@ -281,23 +290,17 @@ pricesdummy <- rep(1,nrow(Tradesuniqueall))
 
 uniquetradesyearzoo <- zoo(x = pricesdummy , order.by = Tradesuniqueall[["Date...Time"]])
 str(uniquetradesyearzoo)
-‘zoo’ series from 2021-02-17 09:56:00 to 2026-02-25 12:31:00
-  Data: num [1:1977] 1 1 1 1 1 1 1 1 1 1 ...
-  Index:  POSIXlt[1:1977], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
 
 # how many trades each year?
 tradesperannum <- aggregate(uniquetradesyearzoo, as.Date(cut(time(uniquetradesyearzoo), "year")), sum)
 
 str(tradesperannum)
-‘zoo’ series from 2021-01-01 to 2026-01-01
-  Data: num [1:6] 37 252 515 548 510 152
-  Index:  Date[1:6], format: "2021-01-01" "2022-01-01" "2023-01-01" "2024-01-01" "2025-01-01" ...
+
 # print number of trades per year
-tradesperannum
 2021-01-01 2022-01-01 2023-01-01 2024-01-01 2025-01-01 2026-01-01
-        37        252        515        548        510        115
+        37        252        515        548        510        191
 sum(coredata(tradesperannum))
-[1] 2014
+[1] 2053
 
 # create bar chart of trades by year
 svg(filename="NZUtradesEmsTradePoint-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
@@ -311,9 +314,9 @@ dev.off()
 dailymedianpricesdataframe <- data.frame(date = index(dailymedianprices),price= round(coredata(dailymedianprices),2))
 
 str(dailymedianpricesdataframe)
-'data.frame':	742 obs. of  2 variables:
+'data.frame':	752 obs. of  2 variables:
  $ date : Date, format: "2021-02-17" "2021-03-03" ...
- $ price: num  40 39 39 39 41.1 ...
+ $ price: num  40 39 39 39 41.1 ..
 
 # write a csv file
 write.csv(dailymedianpricesdataframe, file = "dailymedianprices.csv", row.names = FALSE)
@@ -323,20 +326,22 @@ write.csv(dailymedianpricesdataframe, file = "dailymedianprices.csv", row.names 
 head(dailymedianpricesdataframe,1)
        date price
 1 2021-02-17    40
-tail(dailymedianpricesdataframe,4)
+tail(dailymedianpricesdataframe,1)
+          date price
+752 2026-04-17  46.5
 
 ## chart
 # what should the y axis limit be?
 max(dailymedianpricesdataframe[["price"]] )
 [1] 88.4
-colour [1] "#E41A1C" Alizarin Crimson,
+# colour [1] was "#E41A1C" Alizarin Crimson, is now BBC red "Guardsman" #B80000
 
 svg(filename="NZUpriceEmsTradePointMedian-720by540.svg", width = 8, height = 6, pointsize = 16, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
-png("NZUpriceEmsTradePointMedian-720by540.png", bg="white", width=720, height=540)
+#png("NZUpriceEmsTradePointMedian-720by540.png", bg="white", width=720, height=540)
 ggplot(dailymedianpricesdataframe, aes(x = date, y = price)) +
-geom_line(colour = "#ED1A3B") +
-#geom_point(colour = "#ED1A3B") +
-theme_bw(base_size = 16) +
+geom_line(colour = "#B80000") +
+#geom_point(colour = "#B80000") +
+theme_grey(base_size = 16) +
 scale_y_continuous(breaks = c(0,10,20,30,40,50,60,70,80))  +
 scale_x_date(date_breaks = "year", date_labels = "%Y") +
 theme(axis.ticks.length = unit(-3,"pt"), plot.title = element_text(size = 18, hjust = 0.5, vjust= -8 )) +
@@ -795,6 +800,10 @@ legend("bottom", inset=c(0.0,0.0) ,bty="n", legend=c("ECMI monthly index","ECQI 
 dev.off()
 
 ## older data files
+(today <- Sys.Date())
+[1] "2026-04-11"
+# download and read in the latest trades data
+NZUTrades_ffVEMLm <- read.csv( file = "https://www.emstradepoint.co.nz/documents/867/NZUTrades_ffVEMLm.csv", header = TRUE)
 (today <- Sys.Date())
 [1] "2026-03-24"
 # download and read in the latest trades data
