@@ -17,6 +17,9 @@ It has made 2,112 trades since 17 February 2021.
 #### Chart of daily median prices
 ![](NZUpriceEmsTradePointMedian-720by540.svg)
 
+#### Ggplot2 chart of daily median prices
+![](NZUpriceEmsTradePointMedian-ggplot-720by540.svg)
+
 #### emsTradepoint NZU indices ECMI monthly, ECQI quarterly, VWAP volume weighted average price
 * [ECMI_ECQI_15_01_24](ECMI_ECQI_15_01_24.csv) 
 
