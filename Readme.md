@@ -2,7 +2,7 @@
 
 The energy trading company [emsTradepoint](https://www.emstradepoint.co.nz) hosts csv files of recent New Zealand Unit (NZU) prices from trading on it's brokering service.
 
-They have made 2,298 trades since 17 February 2021.
+They have made 2,352 trades since 17 February 2021.
 ![](NZUtradesEmsTradePoint-720by540.svg) 
 
 #### Trades data file in csv format
