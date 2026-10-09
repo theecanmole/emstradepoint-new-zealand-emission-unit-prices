@@ -315,29 +315,27 @@ In zoo(x = uniquetrades[["Unit.Price"]], order.by = uniquetrades[["Date...Time"]
 
 str(uniquetradeszoo)
 ‘zoo’ series from 2021-02-17 09:56:00 to 2026-09-17 12:17:00
-  Data: num [1:2384] 40 39 39 39 41.1 ...
-  Index:  POSIXlt[1:2384], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
+  Data: num [1:2410] 40 39 39 39 41.1 ...
+  Index:  POSIXlt[1:2410], format: "2021-02-17 09:56:00" "2021-03-03 13:18:00" "2021-03-31 13:42:00" ...
 
 tail(uniquetradeszoo,4)
-2026-09-16 13:07:00 2026-09-16 13:07:00 2026-09-17 12:17:00 2026-09-17 12:17:00
-               51.5                51.5                52.0                52.0
-#2026-08-31 08:34:00 2026-08-31 13:36:00 2026-08-31 13:37:00 2026-09-04 16:41:00
-               51.2                51.5                51.5                51.0
+2026-10-01 14:28:00 2026-10-02 10:37:00 2026-10-02 11:31:00 2026-10-02 13:11:00
+               52.5                51.5                52.0                52.0
 
 # aggregate by day to get median daily prices
 dailymedianprices <- aggregate(uniquetradeszoo, by=as.Date(time(uniquetradeszoo)), median)
 
 str(dailymedianprices)
-‘zoo’ series from 2021-02-17 to 2026-09-17
-  Data: num [1:831] 40 39 39 39 41.1 ...
-  Index:  Date[1:831], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-06" "2021-05-17" ...
+‘zoo’ series from 2021-02-17 to 2026-10-02
+  Data: num [1:837] 40 39 39 39 41.1 ...
+  Index:  Date[1:837], format: "2021-02-17" "2021-03-03" "2021-03-31" "2021-04-06" "2021-05-17" ...
 
 # aggregate by year to calculate number of trades per annum
 Tradesuniqueall[["Date"]] <- as.Date(Tradesuniqueall[["Date...Time"]])
 # add year variable/factor to data
 Tradesuniqueall$Year <- format(Tradesuniqueall[["Date"]], "%Y")
 str(Tradesuniqueall[["Year"]])
- chr [1:2384] "2021" "2021" "2021" "2021" "2021" "2021" "2021" "2021" ...
+
 
 # create a zoo matrix with price =1 and all the dates
 # dummy prices 1 x nrow(uniquetrades)
@@ -345,12 +343,12 @@ pricesdummy <- rep(1,nrow(Tradesuniqueall))
 str(pricesdummy)
 
 length(Tradesuniqueall[["Year"]])
-[1] 2384
+[1] 2410
 yearfactor <- as.factor(Tradesuniqueall[["Year"]])
 str(yearfactor)
  Factor w/ 6 levels "2021","2022",..: 1 1 1 1 1 1 1 1 1 1 ...
 length(yearfactor)
-[1] 2384
+[1] 2410
 
 #uniquetradesyearzoo <- zoo(x = pricesdummy , order.by = Tradesuniqueall[["Date...Time"]])
 #str(uniquetradesyearzoo)
@@ -368,7 +366,7 @@ aggregate(x=pricesdummy, by = list(yearfactor) , sum)
 3    2023 515
 4    2024 548
 5    2025 510
-6    2026 522
+6    2026 548
 
 tradesperannum <- aggregate(x=pricesdummy, by = list(Tradesuniqueall$Year ) , sum)
 
@@ -377,16 +375,17 @@ names(tradesperannum) <-c("Year","Trades")
 
 # print number of trades per year
 tradesperannum
- Year Trades
+tradesperannum
+  Year Trades
 1 2021     37
 2 2022    252
 3 2023    515
 4 2024    548
 5 2025    510
-6 2026    522
+6 2026    548
 
 sum(tradesperannum[2])
-1] 2384
+
 
 # create bar chart of trades by year
 svg(filename="NZUtradesEmsTradePoint-720by540.svg", width = 8, height = 6, pointsize = 12, onefile = FALSE, family = "sans", bg = "white", antialias = c("default", "none", "gray", "subpixel"))
@@ -400,7 +399,7 @@ dev.off()
 dailymedianpricesdataframe <- data.frame(date = index(dailymedianprices),price= round(coredata(dailymedianprices),2))
 
 str(dailymedianpricesdataframe)
-'data.frame':	831 obs. of  2 variables:
+'data.frame':	837 obs. of  2 variables:
  $ date : Date, format: "2021-02-17" "2021-03-03" ...
  $ price: num  40 39 39 39 41.1 ...
 
@@ -414,7 +413,7 @@ head(dailymedianpricesdataframe,1)
 1 2021-02-17    40
 tail(dailymedianpricesdataframe,1)
           date price
-831 2026-09-17    52
+837 2026-10-02    52
 
 ## chart
 # what should the y axis limit be?
